@@ -8,5 +8,5 @@ git clone https://github.com/streamanalyze/sa.android-sdk.git
 
 clone wiki repo:
 ```
-https://github.com/streamanalyze/sa.android-sdk.wiki.git
+git clone https://github.com/streamanalyze/sa.android-sdk.wiki.git
 ```
