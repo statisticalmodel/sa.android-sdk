@@ -14,7 +14,7 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url "https://s3-eu-west-1.amazonaws.com/repository.streamanalyze.com/"
+            url "http://repository.streamanalyze.com/"
         }
         jcenter()
     }

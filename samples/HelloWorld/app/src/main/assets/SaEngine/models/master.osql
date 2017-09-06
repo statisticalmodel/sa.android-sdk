@@ -1,4 +1,0 @@
-create function hello(Charstring name) -> Charstring
-  as select "Hello " + name + " " + num
-       from Number num
-      where num in heartbeat(1);
