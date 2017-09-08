@@ -1,21 +1,17 @@
 sa.android-sdk
 ==============
 
-sa.android is a system for easy development of applications that process and
-analyze real-time streams of data in mobile Android devices. The streams are
-usually produced by sensors on the mobile devices such as the GPS, microphone,
-accelerometer, or the gyroscope. It is a component in the **sa.engine** toolbox
-for analyzing streaming data from mobile devices on the internet.
+**sa.android** is a system for easy development of applications that process and analyze real-time streams of data in Android devices. The streams are usually produced by sensors on the mobile devices such as the GPS, microphone, accelerometer, or the gyroscope. It is a component in the **sa.engine** toolbox for analyzing streaming data from mobile devices on the internet.
 
-If you are new to android development the wiki contains a [beginners guide](https://github.com/streamanalyze/sa.android-sdk/wiki/Getting-started---beginners-guide_tr) that requires no previous knowledge of android development.
+Check out our [wiki](https://github.com/streamanalyze/sa.android-sdk/wiki) for detailed documentation and user guides.
 
-Check out our [wiki](https://github.com/streamanalyze/sa.android-sdk/wiki) for
-detailed documentation and user guides.
-
-## Quick reference.
+If you are new to Android development the wiki contains a [beginners guide](https://github.com/streamanalyze/sa.android-sdk/wiki/Getting-started---beginners-guide_tr) that requires no previous knowledge of android development.
 
 
-Add `http://repository.streamanalyze.com` to repositories in project `build.gradle`:
+## Quick reference
+
+
+First add `http://repository.streamanalyze.com` to the project file `build.gradle` of your repository:
 ```gradle
 allprojects {
     repositories {
@@ -27,13 +23,13 @@ allprojects {
 }
 ```
 
-Then add `com.sa.engine:android:x.y.z` where x.y.z is the version you want to use to the dependencies of your module `build.gradle`
+Then add `com.sa.engine:android:x.y.z`, where x.y.z is the system version you want to use, to module file `build.gradle`.
 ```gradle
 compile 'com.sa.engine:android:x.y.z'
 ```
-Check out the [Releases page](https://github.com/streamanalyze/sa.android-sdk/releases) to look up the latest version.
+Read the [Releases page](https://github.com/streamanalyze/sa.android-sdk/releases) to find the latest version.
 
-To execute your first continuous query: 
+This is a complete example of an Android app calling a continuous query:
 
 ```java
 import com.sa.engine.client.SaClient;
@@ -58,7 +54,7 @@ public class ExampleActivity extends AppCompatActivity {
 }
 ```
 
-Under the samples folder you can find several sample applications. To test them out clone the sample repository:
+Under the **samples** folder you can find several other example apps. Test them out by cloning the sample repository:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 git clone https://github.com/streamanalyze/sa.android-sdk.git
