@@ -1,72 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.example.sa.microphonedemo.MainActivity">
-    <LinearLayout
-        android:id="@+id/controlsContianer"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:weightSum="1">
+    <View
+        android:id="@+id/center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"/>
 
-            <EditText
-                android:id="@+id/minHz"
-                android:inputType="number"
-                android:text="80"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
-
-            <EditText
-                android:id="@+id/maxHz"
-                android:text="400"
-                android:inputType="number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="-4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:weightSum="1">
-
-            <TextView
-                android:text="Minimum Hz"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
-
-            <TextView
-                android:text="Maximum Hz"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
-
-        </LinearLayout>
-        <Button
-            android:id="@+id/startStopButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Start"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/text"
+    <EditText
+        android:id="@+id/minHz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/center"
+        android:inputType="number"
+        android:text="80"/>
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/minHz"
+        android:layout_below="@+id/minHz"
+        android:text="Minimum Hz"/>
+
+    <EditText
+        android:id="@+id/maxHz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/center"
+        android:inputType="number"
+        android:text="400"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/maxHz"
+        android:layout_below="@+id/maxHz"
+        android:text="Maximum Hz"/>
+
+
+    <Button
+        android:id="@+id/startStopButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maxHz"
+        android:layout_marginTop="20dp"
+        android:text="Start"/>
+
+    <TextView
+        android:id="@+id/cqOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        tools:text="234"
+        android:textSize="28sp"
+        android:layout_gravity="center"
+        android:text=""/>
+
+</RelativeLayout>

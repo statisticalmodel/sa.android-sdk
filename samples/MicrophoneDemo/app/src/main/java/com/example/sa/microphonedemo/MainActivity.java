@@ -17,10 +17,10 @@ import com.sa.engine.client.consumers.GenericUiConsumer;
 import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity {
+    //Used when requesting permission in from android
     private final int AUDIO_PERMISSION_REQUEST_CODE = 1000;
     private SaClient saClient;
     private TextView cqOutput;
-    private View controls;
     private EditText minHzEditText;
     private EditText maxHzEditText;
     private Button startStop;
@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        cqOutput = (TextView) findViewById(R.id.text);
-        controls = findViewById(R.id.controlsContianer);
+        cqOutput = (TextView) findViewById(R.id.cqOutput);
         minHzEditText = (EditText) findViewById(R.id.minHz);
         maxHzEditText = (EditText) findViewById(R.id.maxHz);
         startStop = (Button) findViewById(R.id.startStopButton);
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.RECORD_AUDIO},
                     AUDIO_PERMISSION_REQUEST_CODE);
         } else {
-            start();
+            init();
         }
     }
 
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case AUDIO_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    start();
+                    init();
                 } else {
                     // The user denied us access to the microphone. Act accordingly. In this demo we
                     // simply exit the application.
@@ -62,10 +61,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void start() {
+    private void init() {
         this.saClient = new SaClient.Builder(getApplicationContext()).build();
 
-        controls.setVisibility(View.VISIBLE);
         startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
