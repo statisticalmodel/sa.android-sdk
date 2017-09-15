@@ -18,18 +18,24 @@ import java.util.concurrent.Future;
 public class MainActivity extends AppCompatActivity {
     //Used when requesting permission in from android
     private final int AUDIO_PERMISSION_REQUEST_CODE = 1000;
-    private SaClient saClient;
     private PlotCanvas plotCanvas;
     private EditText minHzEditText;
     private EditText maxHzEditText;
     private Button startStop;
+    /***********************************************************************************************
+     * Application declarations to reference sa.android kernel and instance variable queryID
+     * to keep a handle to our CQ
+     **********************************************************************************************/
+    private SaClient saClient;
     private Future<Integer> queryId;
+    /**********************************************************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Bind views in layout activity_main.xml
         this.plotCanvas = (PlotCanvas) findViewById(R.id.plotCanvas);
         this.minHzEditText = (EditText) findViewById(R.id.minHz);
         this.maxHzEditText = (EditText) findViewById(R.id.maxHz);
@@ -42,11 +48,9 @@ public class MainActivity extends AppCompatActivity {
          ******************************************************************************************/
         this.saClient = new SaClient.Builder(getApplicationContext()).reInstallInDebug().build();
 
-        /*****************************************************
-         * Android above API 22 requires us to ask the user
-         * for permission when recording audio. Check if we have
-         * it and ask if we do not.
-         *****************************************************/
+         // Android above API 22 requires us to ask the user
+         // for permission when recording audio. Check if we have
+         // it and ask if we don't.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
             // Ask the user for permission
@@ -81,18 +85,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        // Set up toggling of start/stop button.
+        // Set up toggle of start and stop button in main_activity.xml
         startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (queryId == null) {
+                    startStop.setText("Stop");
                     // Since the edit text in xml has number format we can assume that Integer.parseInt
                     // will not throw an exception.
                     int minHz = Integer.parseInt(minHzEditText.getText().toString());
                     int maxHz = Integer.parseInt(maxHzEditText.getText().toString());
+                    /*******************************************************************************
+                     * Start our CQ and save a handle to it in queryId so that we can cancel it
+                     ******************************************************************************/
                     queryId = startQuery(minHz, maxHz);
-                    startStop.setText("Stop");
                 } else {
+                    /*******************************************************************************
+                     * Stop our CQ
+                     ******************************************************************************/
                     saClient.stop(queryId);
                     startStop.setText("Start");
                     queryId = null;
@@ -102,10 +112,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /***********************************************************************************************
-     * This is the the actual sa.android application code to call the audio_band_filter in sa.enginec
-     * all the OSQL function filter_audio defined in
-     * assets/SaEngine/models/master.osql and use a GenericDataConsumer to receive
-     * the callbacks on a background thread since plotCanvas handles the ui synchronization
+     * This is the the main sa.android application code to call the audio_band_filter function
+     * in our OSQL model defined in assets/SaEngine/models/master.osql.
+     * For efficiency, GenericDataConsumer is used to run the callbacks on a thread managed by
+     * sa.android. If GenericUiConsumer had been used it would slow down the UI thread with
+     * for every updated datapoint. Our PlotCanvas implementation computes display data in the
+     * background and the redrawings in the UI thread is always based on the lasted data.
      **********************************************************************************************/
     public Future<Integer> startQuery(int minHz, int maxHz) {
         return this.saClient.postCall("audio_band_filter", SaClient.argl(minHz, maxHz),
