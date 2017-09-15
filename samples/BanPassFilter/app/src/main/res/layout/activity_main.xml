@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"/>
+
+    <EditText
+        android:id="@+id/minHz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/center"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="number"
+        android:text="1500"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/minHz"
+        android:layout_below="@+id/minHz"
+        android:text="Minimum Hz"/>
+
+    <EditText
+        android:id="@+id/maxHz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/center"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="number"
+        android:text="2000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/maxHz"
+        android:layout_below="@+id/maxHz"
+        android:text="Maximum Hz"/>
+
+
+    <Button
+        android:id="@+id/startStopButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/maxHz"
+        android:layout_marginTop="20dp"
+        android:text="Start"/>
+
+    <com.example.sa.bandpassfilter.PlotCanvas
+        android:id="@+id/plotCanvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/startStopButton"/>
+
+</RelativeLayout>
