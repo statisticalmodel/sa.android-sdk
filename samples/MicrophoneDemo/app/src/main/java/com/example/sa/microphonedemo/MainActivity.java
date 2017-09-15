@@ -35,13 +35,16 @@ public class MainActivity extends AppCompatActivity {
         this.maxHzEditText = (EditText) findViewById(R.id.maxHz);
         this.startStop = (Button) findViewById(R.id.startStopButton);
 
-        // Initialize sa.android with reInstallInDebug flag set. This allows us to change
-        // The files in assets/SaEngine/models and see the results with every run.
+        /*******************************************************************************************
+         * Initialize sa.android with reInstallInDebug flag set. This allows us to change
+         * The files in assets/SaEngine/models and see the results with every run.
+         * SaClient.Builder.build must be called to obtain a reference to sa.android.
+         ******************************************************************************************/
         this.saClient = new SaClient.Builder(getApplicationContext()).reInstallInDebug().build();
 
         /*****************************************************
          * Android above API 22 requires us to ask the user
-         * for permission when record audio. Check if we have
+         * for permission when recording audio. Check if we have
          * it and ask if we do not.
          *****************************************************/
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -98,11 +101,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /***********************************************************************************************
+     * This is the the actual sa.android application code to call the audio_band_filter in sa.enginec
+     * all the OSQL function filter_audio defined in
+     * assets/SaEngine/models/master.osql and use a GenericDataConsumer to receive
+     * the callbacks on a background thread since plotCanvas handles the ui synchronization
+     **********************************************************************************************/
     public Future<Integer> startQuery(int minHz, int maxHz) {
-        /* call the OSQL function filter_audio defined in
-         * assets/SaEngine/models/master.osql and use a GenericDataConsumer to receive
-         * the callbacks on a background thread since plotCanvas handles the ui synchronization
-         */
         return this.saClient.postCall("audio_band_filter", SaClient.argl(minHz, maxHz),
                 new GenericDataConsumer() {
                     @Override

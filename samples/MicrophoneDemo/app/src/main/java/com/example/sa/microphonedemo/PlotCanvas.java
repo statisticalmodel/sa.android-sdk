@@ -45,13 +45,9 @@ public class PlotCanvas extends View {
     private int quarterY;
     private String quarterYText = "0.5";
     private String negativeQuarterYText = "-0.5";
-    private int rightMinusPadding;
     private String maxYText = "";
     private String minYText = "";
     private Paint paint;
-    private boolean line = true;
-    private boolean antiAlias = true;
-    private boolean isHistogram;
     private Paint histogramPaint;
 
     /**
@@ -129,7 +125,6 @@ public class PlotCanvas extends View {
         this.height = getMeasuredHeight();
         this.halfY = getMeasuredHeight() / 2;
         this.quarterY = getMeasuredHeight() / 4;
-        this.rightMinusPadding = getMeasuredWidth() - RIGHT_PADDING;
     }
 
     @Override
