@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.sa.engine.client.SaClient;
-import com.sa.engine.client.consumers.GenericUiConsumer;
+import com.sa.engine.client.consumers.GenericDataConsumer;
 
 import java.util.concurrent.Future;
 
@@ -20,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     //Used when requesting permission in from android
     private final int AUDIO_PERMISSION_REQUEST_CODE = 1000;
     private SaClient saClient;
-    private TextView cqOutput;
+    private PlotCanvas plotCanvas;
     private EditText minHzEditText;
     private EditText maxHzEditText;
     private Button startStop;
@@ -31,26 +30,43 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        cqOutput = (TextView) findViewById(R.id.cqOutput);
-        minHzEditText = (EditText) findViewById(R.id.minHz);
-        maxHzEditText = (EditText) findViewById(R.id.maxHz);
-        startStop = (Button) findViewById(R.id.startStopButton);
+        this.plotCanvas = (PlotCanvas) findViewById(R.id.plotCanvas);
+        this.minHzEditText = (EditText) findViewById(R.id.minHz);
+        this.maxHzEditText = (EditText) findViewById(R.id.maxHz);
+        this.startStop = (Button) findViewById(R.id.startStopButton);
+
+        // Initialize sa.android with reInstallInDebug flag set. This allows us to change
+        // The files in assets/SaEngine/models and see the results with every run.
+        this.saClient = new SaClient.Builder(getApplicationContext()).reInstallInDebug().build();
+
+        /*****************************************************
+         * Android above API 22 requires us to ask the user
+         * for permission when record audio. Check if we have
+         * it and ask if we do not.
+         *****************************************************/
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
+            // Ask the user for permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.RECORD_AUDIO},
                     AUDIO_PERMISSION_REQUEST_CODE);
         } else {
+            // We already have permission, continue to init method.
             init();
         }
     }
 
+    /**********************************************************
+     *  When the user has either granted or denied us access
+     *  to the microphone, this method is called.
+     **********************************************************/
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case AUDIO_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // We got the permission continue to the init method.
                     init();
                 } else {
                     // The user denied us access to the microphone. Act accordingly. In this demo we
@@ -62,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        this.saClient = new SaClient.Builder(getApplicationContext()).build();
-
+        // Set up toggling of start/stop button.
         startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,24 +99,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Future<Integer> startQuery(int minHz, int maxHz) {
-
-      return this.saClient.postQuery("select round(hz)\n" +
-                        "      from Number hz, Number index, Number max, Number windowSize, Number sampleRate,\n" +
-                        "           Vector of Number window\n" +
-                        "     where window in extract(rfft(audio(windowSize,sampleRate)))\n" +
-                        "       and windowSize = 256\n" +
-                        "       and sampleRate = 16000\n" +
-                        "       and max = vmax(window)\n" +
-                        "       and max > 0.001\n" +
-                        "       and window[index] = max\n" +
-                        "       and hz = index * sampleRate/windowSize  * 0.5\n" +
-                        "       and hz > " + minHz +
-                        "       and hz < " + maxHz,
-                new GenericUiConsumer() {
+        /* call the OSQL function filter_audio defined in
+         * assets/SaEngine/models/master.osql and use a GenericDataConsumer to receive
+         * the callbacks on a background thread since plotCanvas handles the ui synchronization
+         */
+        return this.saClient.postCall("audio_band_filter", SaClient.argl(minHz, maxHz),
+                new GenericDataConsumer() {
                     @Override
                     public void onData(Object[] data) {
-                        super.onData(data);
-                        cqOutput.setText(data[0].toString());
+                        plotCanvas.putPoints((Object[]) data[0]);
                     }
                 });
     }

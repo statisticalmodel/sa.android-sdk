@@ -17,8 +17,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/center"
+        android:imeOptions="flagNoExtractUi"
         android:inputType="number"
-        android:text="80"/>
+        android:text="1500"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,8 +35,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/center"
+        android:imeOptions="flagNoExtractUi"
         android:inputType="number"
-        android:text="400"/>
+        android:text="2000"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,14 +55,10 @@
         android:layout_marginTop="20dp"
         android:text="Start"/>
 
-    <TextView
-        android:id="@+id/cqOutput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        tools:text="234"
-        android:textSize="28sp"
-        android:layout_gravity="center"
-        android:text=""/>
+    <com.example.sa.microphonedemo.PlotCanvas
+        android:id="@+id/plotCanvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/startStopButton"/>
 
 </RelativeLayout>
