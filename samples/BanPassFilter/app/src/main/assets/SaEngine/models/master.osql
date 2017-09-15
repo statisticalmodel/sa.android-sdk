@@ -11,7 +11,7 @@ create function band_mask(Number sz, Number lb, Number ub) -> Vector of Number
   as vselect n
         from Number n, Number i
        where i in iota(1,sz)
-         and n = case when i >= lb and i <= ub then 1
+         and n = case when i between lb and ub then 1
                       else 0
                  end;
 
