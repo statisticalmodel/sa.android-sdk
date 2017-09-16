@@ -1,25 +1,24 @@
 /*-*-sql-*-*******************************************************************
  * sa.engine
  *
- * Description: Radio Band Filter example
+ * Description: Audio Band Filter example
  *
  ****************************************************************************/
 
 create function band_mask(Number sz, Number lb, Number ub) -> Vector of Number
   /* Make a bin mask vector of size `sz` with ones in elements in `[lb,ub]`
     and zeroes otherwise */
-  as vselect n
-        from Number n, Number i
-       where i in iota(1,sz)
-         and n = case when i >= lb and i <= ub then 1
-                      else 0
-                 end;
+  as select vector n
+       from Number n, Number i
+      where i in iota(1,sz)
+        and n = case when i >= lb and i <= ub then 1
+                     else 0
+                end;
 
 create function freq_mask(Number sampleRate, Number sz, Number lHz, Number uHz)
                         -> Vector of Number
   as band_mask(sz,lHz/sampleRate*sz*2, uHz/sampleRate*sz*2);
 
-create function audio_band_filter(Number minHz, Number maxHz) -> Stream of Vector of Number
-  as select stream
-            irfft(extract(rfft(audio(512,8000))) .*
-            freq_mask(8000,512,minHz,maxHz));
+create function audio_band_filter(Number minHz, Number maxHz)
+                                -> Stream of Vector of Number
+  as irfft(rfft(audio(512,8000)) .* freq_mask(8000,512,minHz,maxHz));
