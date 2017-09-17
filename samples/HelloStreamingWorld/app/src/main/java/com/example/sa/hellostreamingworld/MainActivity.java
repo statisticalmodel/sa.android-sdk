@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         cqOutput = (TextView)findViewById(R.id.cqOutput);
         saClient = new SaClient.Builder(getApplication()).build();
-        cqId = saClient.postQuery("select 'Hello Streaming world ' + extract(heartbeat(1))",
+        cqId = saClient.postQuery("'Hello Streaming world ' + heartbeat(1)",
                 new GenericUiConsumer() {
                     @Override
                     public void onData(Object[] tuple) {
