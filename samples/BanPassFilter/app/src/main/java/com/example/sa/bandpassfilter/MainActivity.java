@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Button startStop;
     /***********************************************************************************************
      * Application declarations to reference sa.android kernel and instance variable queryID
-     * to keep a handle to our CQ
+     * to keep a handle to our CQ:
      **********************************************************************************************/
     private SaClient saClient;
     private Future<Integer> queryId;
@@ -113,11 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
     /***********************************************************************************************
      * This is the the main sa.android application code to call the audio_band_filter function
-     * in our OSQL model defined in assets/SaEngine/models/master.osql.
-     * For efficiency, GenericDataConsumer is used to run the callbacks on a thread managed by
-     * sa.android. If GenericUiConsumer had been used it would slow down the UI thread with
-     * for every updated datapoint. Our PlotCanvas implementation computes display data in the
-     * background and the redrawings in the UI thread is always based on the lasted data.
+     * using our OSQL model in assets/SaEngine/models/master.osql.
+     *  For efficiency, GenericDataConsumer is used to run the callbacks on a thread managed by
+     * sa.android. If GenericUiConsumer had been used to direcly refresh the UI for every received
+     * datapoint it would have slown down the UI thread.
+     * Thus PlotCanvas computes display data in the background thread and the redrawings in 
+     * the UI thread is always based on the lasted received data point.
      **********************************************************************************************/
     public Future<Integer> startQuery(int minHz, int maxHz) {
         return this.saClient.postCall("audio_band_filter", SaClient.argl(minHz, maxHz),
