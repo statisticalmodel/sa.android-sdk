@@ -6,8 +6,8 @@
  ****************************************************************************/
 
 create function band_mask(Number sz, Number lb, Number ub) -> Vector of Number
-  /* Make a bin mask vector of size `sz` with ones in elements in `[lb,ub]`
-    and zeroes otherwise */
+  /* Make a bin mask vector of size `sz` with ones in range `[lb,ub]`
+     and zeroes otherwise */
   as select vector n
        from Number n, Number i
       where i in iota(1,sz) 
