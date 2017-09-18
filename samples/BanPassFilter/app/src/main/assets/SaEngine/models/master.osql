@@ -10,15 +10,19 @@ create function band_mask(Number sz, Number lb, Number ub) -> Vector of Number
     and zeroes otherwise */
   as select vector n
        from Number n, Number i
-      where i in iota(1,sz)
+      where i in iota(1,sz) 
         and n = case when i >= lb and i <= ub then 1
                      else 0
                 end;
 
 create function freq_mask(Number sampleRate, Number sz, Number lHz, Number uHz)
                         -> Vector of Number
+  /* Make a frequency band pass filter mask of size `sz` 
+     for frequency range `[lHz,uHz]` and sampling rate `sampleRate` */ 
   as band_mask(sz,lHz/sampleRate*sz*2, uHz/sampleRate*sz*2);
 
 create function audio_band_filter(Number minHz, Number maxHz)
                                 -> Stream of Vector of Number
+  /* Run a band pass filter for the frequency rate `[minHz,naxHz]`
+     on an audio stream with sampling rate 8000 and window size 512 */
   as irfft(rfft(audio(512,8000)) .* freq_mask(8000,512,minHz,maxHz));
