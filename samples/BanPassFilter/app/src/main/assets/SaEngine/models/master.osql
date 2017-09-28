@@ -5,16 +5,6 @@
  *
  ****************************************************************************/
 
-create function band_mask(Number sz, Number lb, Number ub) -> Vector of Number
-  /* Make a bin mask vector of size `sz` with ones in range `[lb,ub]`
-     and zeroes otherwise */
-  as select vector n
-       from Number n, Number i
-      where i in iota(1,sz) 
-        and n = case when i >= lb and i <= ub then 1
-                     else 0
-                end;
-
 create function freq_mask(Number sampleRate, Number sz, Number lHz, Number uHz)
                         -> Vector of Number
   /* Make a frequency band pass filter mask of size `sz` 
