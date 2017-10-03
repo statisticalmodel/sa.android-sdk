@@ -5,7 +5,37 @@ First you should get aquantited with the [sa.engine system](https://docs.streama
 
 This git repository contains examples of stand-alone Android applications using the [sa.android SDK](https://docs.streamanalyze.com/sa-android-sdk.html) to call sa.engine from Java on Android devices. It is completely self contained so even if you are new to Android it should be easy for you to get started.
 
-If you are a beginner to Android development we recommend starting with the [**Hello Streaming World**](https://github.com/streamanalyze/sa.android-sdk/wiki/Hello-Streaming-World---beginners-guide) in `samples/HelloStreamingWorld`. It is tutorial showing how to develop a simplest possible streaming sa.android app and includes a small guide of how to set up an [Android Studio](https://developer.android.com/studio) project. You need no previous knowledge about Android Studio. 
+If you are a beginner to Android development we recommend starting with the [**Hello Streaming World**](https://github.com/streamanalyze/sa.android-sdk/wiki/Hello-Streaming-World---beginners-guide) in folder `samples/HelloStreamingWorld`. It is a tutorial showing how to develop a simplest possible streaming sa.android app and includes a small guide of how to set up an [Android Studio](https://developer.android.com/studio) project. You need no previous knowledge about Android Studio. 
 
-The [**Band Pass Filter**](https://github.com/streamanalyze/sa.android-sdk/wiki/Band-Pass-Filter) stored in `BandPassFilter` shows how to develop an app that filters away frequencies outside a frequency interval in a signal stream from the microphone on an Android device. It includes a simple mathematical model for a such a band pass filter in OSQL and Java code to use the model in an Android app.
+The [**Band Pass Filter**](https://github.com/streamanalyze/sa.android-sdk/wiki/Band-Pass-Filter) stored in folder `samples/BandPassFilter` shows how to develop an app that filters away frequencies outside a frequency interval in a signal stream from the microphone on an Android device. It includes a simple mathematical model for a such a band pass filter in OSQL and Java code to use the model in an Android app.
 
+Visual Analyzer plug-in to Android Studio
+-----------------------------------------
+
+To simplify the development of data stream models there is a Visual Analyzer plugin for Android Studio called the **SA Plugin**. It helps you create new models according to the file structure required by Android Studio. The data stream models are developed and immediately tested on your PC using the Visual Analyzer. 
+
+__Installing the SA plugin__
+
+1. Download and install the Visual Analyzer following the instructions in [Visual Analyzer](https://docs.streamanalyze.com/visual_analyzer.html). The default install location is `C:\Program Files\streamanalyze\sa.engine`.
+
+2. Open Android Studio and select **File \> Settings... \> Plugins \> Install plugin from disk...** and choose the file `intellij-plugin\sa.android-plugin.jar` in the Visual Analyzer home folder (default `C:\Program Files\streamanalyze\sa.engine`).
+
+3. Restart Android Studio
+
+To get a menue of the main functionalities of the SA plugin, click **Tools \> sa.engine**. With the plugin you can start the Visual Analyzer for your project, edit existing OSQL models, and create new ones. The plugin assures that new model files are created in the folder required by sa.adroid. 
+
+__The master file__
+
+The file named `master.osql` defines the OSQL used in the app. It is loaded into the local database of an sa.android app on a device when a new version of the app is run for the first time. 
+
+As an example, open the sample project `BandPassFilter` and edit the master file by clicking **Tools \> sa.engine \> Open** and selecting the file `master.osql`. 
+
+__Using the Visual Analyzer__
+
+Now we can test the model in the Visual Analyzer. Start it by clicking **Tools \> sa.engine \> Start Visual Analyzer**. You can load the master file into the Visual Analyzer by entering the command ´< 'master.osql'´. Analogously other model files can be loaded by using `< 'filename';` statements in `master.osql`.
+
+During development of OSQL models it is often practical to cut-and-paste statements from model files into the Visual Analyzer for immediate evaluation and visualization.
+
+__Model versions__
+
+If you change the model you will have to instruct Android Studio to reinstall it on the device. More here...
