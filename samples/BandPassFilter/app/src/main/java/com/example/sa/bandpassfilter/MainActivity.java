@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
          * The files in assets/SaEngine/models and see the results with every run.
          * SaClient.Builder.build must be called to obtain a reference to sa.android.
          ******************************************************************************************/
-        this.saClient = new SaClient.Builder(getApplicationContext()).reInstallInDebug().build();
+        this.saClient = new SaClient.Builder(getApplicationContext()).build();
 
          // Android above API 22 requires us to ask the user
          // for permission when recording audio. Check if we have
