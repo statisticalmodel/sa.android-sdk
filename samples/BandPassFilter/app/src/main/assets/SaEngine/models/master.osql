@@ -4,6 +4,16 @@
  * Description: Audio Band Pass Filter example
  *
  ****************************************************************************/
+create function band_mask(Number sz, Number lb, Number ub) -> Vector of Number
+  /* Make a mask vector of size `sz` with ones in range `[lb,ub]`
+     and zeroes otherwise */
+  as select Vector of x
+       from Number x, Number i
+      where i in range(sz)
+        and x = case when i >= lb and i <= ub then 1
+                     else 0
+                end
+      order by i;
 
 create function freq_mask(Number sampleRate, Number sz, Number lHz, Number uHz)
                         -> Vector of Number
