@@ -1,0 +1,40 @@
+create function ts() -> Number
+  as select ts from Number ts where optional(ts = rnow());
+
+create function accelerometer() -> Stream of Vector of Number
+/* Function that extracts the data vector from the accelerometer */
+  as select stream of data
+              from Vector event, Vector data
+             where event in sensor(1)
+               and data = event[2];
+
+create function absaccdata() -> Stream of Number
+/* take the sum of the absolute values of the
+   accelerometer data vector */
+  as sum(abs(accelerometer()));
+
+
+create function absacc_vstdev(Number window_size, Number window_stride) -> Stream of Number
+/* Calculate the standard deviation over a window of absaccdata()
+   with size window_size and stride window_stride */
+  as vstdev(winagg(absAccData(), window_size, window_stride));
+
+create function isShake(Number x, Number th) -> Number
+/* Return one when number x is larger than th */
+  as case when x > th then 1
+          else 0
+      end;
+
+create function detectShake(Number th) -> stream of (Object, Object, Object)
+/* Send message to server when the status of shaking is changed. I.e one
+   message when going from calm to shaking and one when going from shaking
+   to calm.
+
+   th is the threshold for the standard deviation over the window. I.e. if the
+   standard deviation of a window of absaccdata is larger than th then the
+   device is considered shaking.*/
+    as select stream of [ts, this_peerid(), value]
+         from Number ts,
+              Number value
+         where value in changed(isShake(vstdev(winagg(absAccData(), 50,5)), th))
+           and ts = ts();
