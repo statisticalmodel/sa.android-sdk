@@ -6,7 +6,9 @@ create function isLarger(Number x, Number th) -> Number
 
 create function accelerometer_data() -> Stream of Vector of Number
   /* Function that extracts a stream of data vectors from the accelerometer */
-  as sensor(1)[2]; /* events have format [ts, data] */
+  as select stream of event[2]/* events have format [ts, data] */
+       from Vector event
+      where event in sensor(1);
 
 create function absaccdata() -> Stream of Number
   /* Compute a stream of the sums of the absolute values of the
@@ -18,7 +20,7 @@ create function absacc_stdev(Number window_size, Number window_stride) -> Stream
      with size `window_size` and stride `window_stride` */
   as stdev(winagg(absAccData(), window_size, window_stride));
 
-create function detectShake(Number th) -> stream of (Object, Object, Object)
+create function detectShake(Number th) -> stream of Vector
   /* Stream of shake status changes where the unit is considered shaking when the standard
      deviation the 50 latest absaccdata() readings is larger than `th` */
     as select stream of [rnow(), this_peerid(), value]

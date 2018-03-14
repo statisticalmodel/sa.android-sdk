@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity // Main class of app
     private TextView titleTextView;
     private EditText connectionEditText;
     private Button startStopButton;
-    private Button saveButton;
     private TextView log;
 
     // Define sa.engine interface variables:
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity // Main class of app
         //Retrieve widgets and bind to corresponding widget variables
         connectionEditText = (EditText) findViewById(R.id.edgeNameEditText);
         startStopButton = (Button) findViewById(R.id.startStopButton);
-        saveButton = (Button) findViewById(R.id.saveButton);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
         log = (TextView) findViewById(R.id.log);
 
@@ -99,7 +97,6 @@ public class MainActivity extends AppCompatActivity // Main class of app
                             });
                     // Change state of layout to active mode
                     connectionEditText.setVisibility(View.GONE);
-                    saveButton.setVisibility(View.GONE);
                     titleTextView.setText(edgeSpec);
                     startStopButton.setText("STOP");
                 } else {// Stop active edge listener:
@@ -109,17 +106,7 @@ public class MainActivity extends AppCompatActivity // Main class of app
                     titleTextView.setText("sa.edge analyzer");
                     startStopButton.setText("ACTIVATE");
                     connectionEditText.setVisibility(View.VISIBLE);
-                    saveButton.setVisibility(View.VISIBLE);
                 }
-            }
-        });
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saClient.save(); // Save image for sa.engine.
-                // Show message on screen that image is save:
-                Toast.makeText(MainActivity.this,"saved!", Toast.LENGTH_SHORT).show();
             }
         });
     }
