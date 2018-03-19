@@ -40,6 +40,7 @@
 
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_marginTop="16dp"
         android:fillViewport="true"
         android:layout_width="match_parent"

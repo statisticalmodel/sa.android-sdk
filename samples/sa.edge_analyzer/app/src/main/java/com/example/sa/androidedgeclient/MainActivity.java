@@ -5,10 +5,12 @@ package com.example.sa.androidedgeclient;
  ***************************************************/
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +25,11 @@ public class MainActivity extends AppCompatActivity // Main class of app
     private TextView titleTextView;
     private EditText connectionEditText;
     private Button startStopButton;
+    private ScrollView scrollView;
     private TextView log;
+
+    private Handler handler;
+
 
     // Define sa.engine interface variables:
     private SaClient saClient;              // Interface to sa.engine
@@ -33,11 +39,12 @@ public class MainActivity extends AppCompatActivity // Main class of app
     protected void onCreate(Bundle savedInstanceState) { // Callback when main activity is created
         super.onCreate(savedInstanceState);              // Call OnCreate in superclass first
         setContentView(R.layout.activity_main);          // Load layout for main activity
-
+        handler = new Handler();
         //Retrieve widgets and bind to corresponding widget variables
         connectionEditText = (EditText) findViewById(R.id.edgeNameEditText);
         startStopButton = (Button) findViewById(R.id.startStopButton);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
         log = (TextView) findViewById(R.id.log);
 
         /********************************
@@ -124,5 +131,13 @@ public class MainActivity extends AppCompatActivity // Main class of app
 
     private void addTextToLog(String text) {
         log.append(text + "\n");
+        handler.postDelayed(fullScrollRunnable,500);
     } // Convenience method
+
+    private Runnable fullScrollRunnable = new Runnable() {
+        @Override
+        public void run() {
+            scrollView.fullScroll(View.FOCUS_DOWN);
+        }
+    };
 }
